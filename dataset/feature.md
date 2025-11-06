@@ -7,6 +7,7 @@ Weight: float,
 MRI_Delay: float,
 Presecription: String?,
 DosageMg: int?,
+!!!!!!!!! DosageMg is float
 Age: int,
 EducationLevel: [No,Primary,Secondary,DeplomaDegree],
 DominantHand: [Left,Right],

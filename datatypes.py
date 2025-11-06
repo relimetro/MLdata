@@ -1,5 +1,8 @@
 # Datatypes.py
 
+from operator import indexOf
+
+
 class LifestyleQuestionare:
     def __init__(self,*,Diabetic,AlcoholLevel,HeartRate,BloodOxygenLevel,BodyTemperature,Weight,MRI_Delay,Presecription,DosageMg,Age,EducationLevel,DominantHand,Gender,FamilyHistory,SmokingStatus,APOE_e19,PhysicalActivity,DepressionStatus,MedicationHistory,NutritionDiet,SleepQuality,ChronicHealthConditions,Dementia):
         ## TODO, perform input validation / store as not string
@@ -56,6 +59,43 @@ def LifestyleQuestionareFromDataset(content):
         Dementia = content[-1].strip()
     )
     return ret
+
+def TFint(b:bool) -> int : return 1 if b else 0
+def fltInt(f:float) -> int : return int(float(f)*10)
+def catInt(x:str,l:list[str]) -> int : 
+	if x not in l : raise ValueError(f"catInt Err: '{x}' not in {l}")
+	return indexOf(l,x)
+
+
+def LifestyleQuestionareToNumeric(x:LifestyleQuestionare) -> list[int] :
+	return [
+        TFint(x.Diabetic),
+        fltInt(x.AlcoholLevel),
+        int(x.HeartRate),
+        fltInt(x.BloodOxygenLevel),
+        fltInt(x.BodyTemperature),
+        fltInt(x.Weight),
+        fltInt(x.MRI_Delay),
+        catInt(x.Presecription, ["None","Galantamine","Donepezil","Memantine","Rivastigmine"]), # string | "None" [Galantamine, Donepezil,Memantine,Rivastigmine
+        fltInt(x.DosageMg),
+        int(x.Age),
+        catInt(x.EducationLevel, ["No School","Primary School", "Secondary School", "Diploma/Degree"]),  # No School,Primary School,Secondary School,Deploma/Degree
+        catInt(x.DominantHand, ["Left","Right"]), # Left,Right
+        catInt(x.Gender, ["Male","Female"]), # Male,Female
+        TFint(x.FamilyHistory),
+        catInt(x.SmokingStatus, ["Current Smoker","Former Smoker", "Never Smoked"]), # Current Smoker,Former Smoker,Never Smoked
+        TFint(x.APOE_e19), # true/false
+        catInt(x.PhysicalActivity, ["Sedentary","Moderate Activity","Mild Activity"]), # Sedentary,Moderate Activity,Mild Activity
+        TFint(x.DepressionStatus),
+        TFint(x.MedicationHistory),
+        catInt(x.NutritionDiet, ["Low-Carb Diet","Mediterranean Diet", "Balanced Diet"] ), # Low-Carb Diet,Mediterranean Diet,Balanced Diet
+        catInt(x.SleepQuality, ["Poor","Good"]), # Poor,Good
+        catInt(x.ChronicHealthConditions, ["Diabetes","Heart Disease","Hypertension","None"]),
+		int(x.Dementia)
+	]
+
+
+
 
 
 
