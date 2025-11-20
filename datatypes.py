@@ -2,6 +2,10 @@
 
 from operator import indexOf
 
+LifestyleFeatures = ["Diabetic:","AlcoholLevel:","HeartRate:","BloodOxygenLevel:","BodyTemperature:","Weight:","MRI_Delay:","Presecription:","DosageMg:","Age:","EducationLevel:","DominantHand:","Gender:","FamilyHistory:","SmokingStatus:","APOE_e19:","PhysicalActivity:","DepressionStatus:","MedicationHistory:","NutritionDiet:","SleepQuality:","ChronicHealthConditions"]
+# TODO: add dementia = None, for intermediary
+
+
 
 class LifestyleQuestionare:
     def __init__(self,*,Diabetic,AlcoholLevel,HeartRate,BloodOxygenLevel,BodyTemperature,Weight,MRI_Delay,Presecription,DosageMg,Age,EducationLevel,DominantHand,Gender,FamilyHistory,SmokingStatus,APOE_e19,PhysicalActivity,DepressionStatus,MedicationHistory,NutritionDiet,SleepQuality,ChronicHealthConditions,Dementia):
@@ -32,7 +36,7 @@ class LifestyleQuestionare:
         self.ChronicHealthConditions = ChronicHealthConditions # Diabetes,Hearth Disease,Hypertension,None
         self.Dementia = Dementia # 1|0
 
-def LifestyleQuestionareFromDataset(content):
+def LifestyleQuestionareFromDataset(content:list[str]) -> LifestyleQuestionare:
     ret = LifestyleQuestionare(
         Diabetic = 'true' if (content[0] == '1') else 'false',
         AlcoholLevel = content[1],
@@ -59,6 +63,37 @@ def LifestyleQuestionareFromDataset(content):
         Dementia = content[-1].strip()
     )
     return ret
+
+def LifestyleQuestionareFromList(content:list[str]) -> LifestyleQuestionare:
+    ret = LifestyleQuestionare(
+        Diabetic = 'true' if (content[0] == '1') else 'false',
+        AlcoholLevel = content[1],
+        HeartRate = content[2],
+        BloodOxygenLevel = content[3],
+        BodyTemperature = content[4],
+        Weight = content[5],
+        MRI_Delay = content[6],
+        Presecription = "None" if content[7] == "" else content[7],
+        DosageMg = "0" if content[8] == "" else content[8],
+        Age = content[9],
+        EducationLevel = content[10],
+        DominantHand = content[11],
+        Gender = content[12],
+        FamilyHistory = 'true' if (content[13] == 'Yes') else 'false',
+        SmokingStatus = content[14],
+        APOE_e19 = 'true' if (content[15] == 'Positive') else 'false',
+        PhysicalActivity = content[16],
+        DepressionStatus = 'true' if (content[17] == 'Yes') else 'false',
+        MedicationHistory = 'true' if (content[18] == 'Yes') else 'false',
+        NutritionDiet = content[19],
+        SleepQuality = content[20],
+        ChronicHealthConditions = content[21],
+		Dementia = 2
+        # Dementia = content[-1].strip()
+    )
+    return ret
+
+
 
 def TFint(b:bool) -> int : return 1 if b else 0
 def fltInt(f:float) -> int : return int(float(f)*10)
@@ -93,6 +128,21 @@ def LifestyleQuestionareToNumeric(x:LifestyleQuestionare) -> list[int] :
         catInt(x.ChronicHealthConditions, ["Diabetes","Heart Disease","Hypertension","None"]),
 		int(x.Dementia)
 	]
+
+
+def LifestyleQuestionareFromIntermediary(txt:str) -> LifestyleQuestionare:
+	# LifestyleFeatures
+	split:list[str] = txt.split(",")
+	vals:list[str] = []
+	for x in split:
+		x = x.strip()
+		kp = x.split(":")
+		if len(kp) == 1 :
+			if kp[0].startswith("ChronicHealthConditions"):
+				vals.append(kp[0][23:])
+		else :
+			vals.append(kp[1])
+	return LifestyleQuestionareFromList(vals)
 
 
 
