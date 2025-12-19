@@ -1,0 +1,3 @@
+[submodule "ADReSS/--force"]
+	path = ADReSS/CHAFile
+	url = https://github.com/macramole/CHAFile
