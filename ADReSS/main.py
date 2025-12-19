@@ -62,8 +62,7 @@ def getPar(cha: ChaFile) -> str:
 
 def to_jsonl(jsonInput:str, jsonOutput:str) -> str :
 	jsonInput = jsonInput.replace("\n"," ")
-	return '{"contents":[{"role":"user","parts":[{"text":"'+jsonInput+'}]},{"role":"model","parts":[{"text":"'+jsonOutput+'"}]}]},\n'
-
+	return '{"contents":[{"role":"user","parts":[{"text":"'+jsonInput+'"}]},{"role":"model","parts":[{"text":"'+jsonOutput+'"}]}]}\n'
 
 def loadMMSE() -> dict[str,str]:
 	out = {}
@@ -136,6 +135,11 @@ def cleanCha(x:str) -> str:
 	x = x.replace(" ,",",")
 	x = x.replace(".,",".")
 	x = x.replace(".,",".")
+
+	x = x.replace("{","")
+	x = x.replace("}","")
+	x = x.replace(":","")
+	x = x.replace('"',"")
 	return x
 
 
